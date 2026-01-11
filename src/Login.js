@@ -11,12 +11,12 @@ function Login() {
   // Hardcoded credentials
   const credentials = {
     citizen: {
-      email: 'citizen@emergency.gov',
-      password: 'citizen123'
+      email: 'citizen',
+      password: '123'
     },
     government: {
-      email: 'gov@emergency.gov', 
-      password: 'gov123'
+      email: 'government', 
+      password: '123'
     }
   };
 
