@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from './DataContext';
+import CitizenMapComponent from './CitizenMapComponent';
+
 import './Dashboard.css';
 
 function CitizenDashboard() {
-  const [userRole, setUserRole] = useState('');
   const [incidentType, setIncidentType] = useState('');
   const [incidentDescription, setIncidentDescription] = useState('');
   const [incidentSeverity, setIncidentSeverity] = useState('Low');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
   const navigate = useNavigate();
   const { notices, incidents, addIncident } = useData();
 
@@ -17,7 +20,6 @@ function CitizenDashboard() {
       navigate('/');
       return;
     }
-    setUserRole(role);
   }, [navigate]);
 
   const handleLogout = () => {
@@ -25,25 +27,92 @@ function CitizenDashboard() {
     navigate('/');
   };
 
+  const handleLocationUpdate = (location) => {
+    setUserLocation(location);
+    console.log('📍 Location updated in dashboard:', location);
+  };
+
   const handleReportIncident = () => {
-    if (incidentType && incidentDescription.trim()) {
-      addIncident(incidentType, incidentDescription, incidentSeverity);
-      setIncidentType('');
-      setIncidentDescription('');
-      setIncidentSeverity('Low');
+    if (incidentType && incidentDescription.trim() && !isSubmitting) {
+      setIsSubmitting(true);
+      
+      // Use location from map component if available, otherwise try to get it
+      if (userLocation) {
+        console.log('📍 Reporting incident using tracked location:', userLocation);
+        addIncident(incidentType, incidentDescription, incidentSeverity, userLocation);
+        setIncidentType('');
+        setIncidentDescription('');
+        setIncidentSeverity('Low');
+        setIsSubmitting(false);
+      } else {
+        // Fallback: try to get location if not available from map
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              const location = { lat: latitude, lng: longitude };
+              
+              console.log('📍 Reporting incident from fresh location:', location);
+              addIncident(incidentType, incidentDescription, incidentSeverity, location);
+              
+              setIncidentType('');
+              setIncidentDescription('');
+              setIncidentSeverity('Low');
+              setIsSubmitting(false);
+            },
+            (error) => {
+              console.error('❌ Failed to get location for incident:', error);
+              
+              // Provide helpful error message based on error type
+              let errorMessage = '⚠️ Could not get your location. ';
+              switch(error.code) {
+                case error.PERMISSION_DENIED:
+                  errorMessage += 'Please enable location access in your browser settings and try again.';
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  errorMessage += 'Location information is unavailable. Please check your device settings.';
+                  break;
+                case error.TIMEOUT:
+                  errorMessage += 'Location request timed out. Please try again.';
+                  break;
+                default:
+                  errorMessage += 'Please ensure location services are enabled.';
+              }
+              
+              const proceed = window.confirm(errorMessage + '\n\nDo you want to submit the incident anyway? (It will use an approximate location)');
+              
+              if (proceed) {
+                addIncident(incidentType, incidentDescription, incidentSeverity, null);
+                setIncidentType('');
+                setIncidentDescription('');
+                setIncidentSeverity('Low');
+              }
+              setIsSubmitting(false);
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 0
+            }
+          );
+        } else {
+          // Geolocation not supported
+          const proceed = window.confirm('⚠️ Geolocation is not supported in your browser. Do you want to submit the incident anyway? (It will use an approximate location)');
+          if (proceed) {
+            addIncident(incidentType, incidentDescription, incidentSeverity, null);
+            setIncidentType('');
+            setIncidentDescription('');
+            setIncidentSeverity('Low');
+          }
+          setIsSubmitting(false);
+        }
+      }
     }
   };
 
-  const getSeverityColor = (severity) => {
-    switch (severity) {
-      case 'Critical': return '#e74c3c';
-      case 'Medium': return '#f39c12';
-      case 'Low': return '#27ae60';
-      default: return '#666';
-    }
+  const handleMapMarkerClick = (item, type) => {
+    console.log('Citizen clicked on:', item, type);
   };
-
-  const citizenIncidents = incidents.filter(incident => incident.reportedBy === 'Citizen');
 
   return (
     <div className="dashboard-container">
@@ -63,7 +132,7 @@ function CitizenDashboard() {
         <div className="dashboard-grid">
           {/* Government Notices Section */}
           <div className="dashboard-section">
-            <h3>Government Notices</h3>
+            <h3>📢 View Notices</h3>
             <div className="notices-list">
               {notices.length === 0 ? (
                 <p className="no-data">No government notices available.</p>
@@ -81,7 +150,7 @@ function CitizenDashboard() {
 
           {/* Report Incident Section */}
           <div className="dashboard-section">
-            <h3>Report an Incident</h3>
+            <h3>🚨 Report Incident</h3>
             <div className="incident-form">
               <div className="form-group">
                 <label>Incident Type:</label>
@@ -91,9 +160,9 @@ function CitizenDashboard() {
                   className="form-input"
                 >
                   <option value="">Select incident type</option>
-                  <option value="Fire">Fire</option>
-                  <option value="Medical Emergency">Medical Emergency</option>
                   <option value="Accident">Accident</option>
+                  <option value="Fire">Fire</option>
+                  <option value="Medical">Medical</option>
                   <option value="Crime">Crime</option>
                   <option value="Natural Disaster">Natural Disaster</option>
                   <option value="Other">Other</option>
@@ -104,7 +173,7 @@ function CitizenDashboard() {
                 <textarea
                   value={incidentDescription}
                   onChange={(e) => setIncidentDescription(e.target.value)}
-                  placeholder="Describe the incident"
+                  placeholder="Describe incident"
                   className="form-textarea"
                   rows="4"
                 />
@@ -147,40 +216,23 @@ function CitizenDashboard() {
               <button 
                 className="submit-button"
                 onClick={handleReportIncident}
-                disabled={!incidentType || !incidentDescription.trim()}
+                disabled={!incidentType || !incidentDescription.trim() || isSubmitting}
               >
-                Submit Incident
+                {isSubmitting ? 'Getting Location...' : 'Submit Incident'}
               </button>
             </div>
           </div>
 
-          {/* My Reported Incidents Section */}
+          {/* Live Map Section */}
           <div className="dashboard-section full-width">
-            <h3>My Reported Incidents</h3>
-            <div className="incidents-list">
-              {citizenIncidents.length === 0 ? (
-                <p className="no-data">You haven't reported any incidents yet.</p>
-              ) : (
-                citizenIncidents.map(incident => (
-                  <div key={incident.id} className="incident-item">
-                    <div className="incident-header">
-                      <span className="incident-type">{incident.type}</span>
-                      <span 
-                        className="severity-badge"
-                        style={{ backgroundColor: getSeverityColor(incident.severity) }}
-                      >
-                        {incident.severity}
-                      </span>
-                    </div>
-                    <p className="incident-description">{incident.description}</p>
-                    <div className="incident-footer">
-                      <span className="reported-by">Reported by: You</span>
-                      <span className="timestamp">{incident.timestamp}</span>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
+            <h3>🗺 Live Emergency Map</h3>
+            <CitizenMapComponent 
+              incidents={incidents} 
+              showResources={true}
+              showUserLocation={true}
+              onMarkerClick={handleMapMarkerClick}
+              onLocationUpdate={handleLocationUpdate}
+            />
           </div>
         </div>
       </div>

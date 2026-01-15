@@ -252,6 +252,549 @@
   font-style: italic;
 }
 
+.location-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  color: #856404;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Map Component Styles */
+.map-container {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.map-header {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.map-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.1rem;
+  border: none;
+  padding: 0;
+}
+
+.map-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.map-style-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.map-style-btn:hover {
+  background: #5a6fd8;
+  transform: translateY(-1px);
+}
+
+.map-legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-dot.critical { background-color: #e74c3c; }
+.legend-dot.medium { background-color: #f39c12; }
+.legend-dot.low { background-color: #27ae60; }
+.legend-dot.hospital { background-color: #3498db; }
+.legend-dot.fire-station { background-color: #e67e22; }
+.legend-dot.police-station { background-color: #9b59b6; }
+.legend-dot.mechanic { background-color: #34495e; }
+.legend-dot.user-location { background-color: #2ecc71; }
+
+.map-view {
+  position: relative;
+  height: 400px;
+  background: #e8f4f8;
+  overflow: hidden;
+}
+
+.map-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.map-error h3 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.map-error p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* MapLibre-specific styles */
+.maplibre-map-container {
+  width: 100%;
+  height: 500px;
+  min-height: 500px;
+  border-radius: 0 0 10px 10px;
+  position: relative;
+}
+
+/* Volunteer Login Styles */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #5a6fd8;
+}
+
+.demo-credentials {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border-left: 4px solid #667eea;
+}
+
+.demo-credentials p {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.demo-credentials strong {
+  color: #333;
+}
+
+/* Volunteer Dashboard Styles */
+.notifications-panel {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.notifications-panel h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notifications-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+  border-left: 4px solid;
+  background: #f8f9fa;
+}
+
+.notification-item.critical {
+  border-left-color: #e74c3c;
+  background: #fdf2f2;
+}
+
+.notification-item.medium {
+  border-left-color: #f39c12;
+  background: #fef9e7;
+}
+
+.notification-item.low {
+  border-left-color: #27ae60;
+  background: #f0f9f4;
+}
+
+.notification-content p {
+  margin: 0 0 0.25rem 0;
+  color: #333;
+}
+
+.notification-content small {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.5rem;
+}
+
+.notification-close:hover {
+  color: #333;
+}
+
+.no-notifications {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 2rem;
+}
+
+.incident-summary {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.incident-summary h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border-bottom: 3px solid;
+}
+
+.stat-item:nth-child(1) {
+  border-bottom-color: #e74c3c;
+}
+
+.stat-item:nth-child(2) {
+  border-bottom-color: #f39c12;
+}
+
+.stat-item:nth-child(3) {
+  border-bottom-color: #27ae60;
+}
+
+.stat-item:nth-child(4) {
+  border-bottom-color: #667eea;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* Leaflet-specific styles */
+.leaflet-map-container {
+  width: 100%;
+  height: 500px;
+  min-height: 500px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.leaflet-container {
+  background-color: #f0f0f0;
+}
+
+/* Ensure map tiles are visible */
+.leaflet-tile-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-map-pane {
+  z-index: 1 !important;
+}
+
+.maplibre-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+}
+
+.maplibre-marker:hover {
+  transform: rotate(-45deg) scale(1.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.maplibre-user-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  background-color: #2ecc71;
+}
+
+.maplibre-popup {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  z-index: 100;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.map-popup-content {
+  padding: 1rem;
+}
+
+.map-popup-content h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+.map-popup-content p {
+  margin: 0.5rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.map-popup-content strong {
+  color: #333;
+}
+
+/* Custom markers for Mapbox */
+.incident-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+}
+
+.incident-marker:hover {
+  transform: rotate(-45deg) scale(1.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.resource-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+}
+
+.resource-marker:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.user-location-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+}
+
+.user-location-icon {
+  font-size: 24px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.location-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(46, 204, 113, 0.3);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.marker-icon {
+  transform: rotate(45deg);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .dashboard-grid {
@@ -276,5 +819,24 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.3rem;
+  }
+  
+  .map-legend {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .map-view {
+    height: 300px;
+  }
+  
+  .marker-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
   }
 }

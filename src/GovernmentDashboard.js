@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from './DataContext';
+import GovernmentMapComponent from './GovernmentMapComponent';
 import './Dashboard.css';
 
 function GovernmentDashboard() {
-  const [userRole, setUserRole] = useState('');
   const [noticeTitle, setNoticeTitle] = useState('');
   const [noticeMessage, setNoticeMessage] = useState('');
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ function GovernmentDashboard() {
       navigate('/');
       return;
     }
-    setUserRole(role);
   }, [navigate]);
 
   const handleLogout = () => {
@@ -41,6 +40,10 @@ function GovernmentDashboard() {
     }
   };
 
+  const handleMapMarkerClick = (item, type) => {
+    console.log('Government clicked on:', item, type);
+  };
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -59,10 +62,10 @@ function GovernmentDashboard() {
         <div className="dashboard-grid">
           {/* Notice Posting Section */}
           <div className="dashboard-section">
-            <h3>Post Official Notice</h3>
+            <h3>📢 Post Official Notice</h3>
             <div className="notice-form">
               <div className="form-group">
-                <label>Notice Title:</label>
+                <label>Title:</label>
                 <input
                   type="text"
                   value={noticeTitle}
@@ -72,7 +75,7 @@ function GovernmentDashboard() {
                 />
               </div>
               <div className="form-group">
-                <label>Notice Message:</label>
+                <label>Message:</label>
                 <textarea
                   value={noticeMessage}
                   onChange={(e) => setNoticeMessage(e.target.value)}
@@ -93,7 +96,7 @@ function GovernmentDashboard() {
 
           {/* Posted Notices Section */}
           <div className="dashboard-section">
-            <h3>Posted Notices</h3>
+            <h3>📢 Posted Notices</h3>
             <div className="notices-list">
               {notices.length === 0 ? (
                 <p className="no-data">No notices posted yet.</p>
@@ -109,9 +112,9 @@ function GovernmentDashboard() {
             </div>
           </div>
 
-          {/* Citizen Incidents Section */}
+          {/* Incident Monitoring Section */}
           <div className="dashboard-section full-width">
-            <h3>Incidents Reported by Citizens</h3>
+            <h3>🚨 Incident Monitoring</h3>
             <div className="incidents-list">
               {incidents.length === 0 ? (
                 <p className="no-data">No incidents reported yet.</p>
@@ -136,6 +139,17 @@ function GovernmentDashboard() {
                 ))
               )}
             </div>
+          </div>
+
+          {/* Map View Section */}
+          <div className="dashboard-section full-width">
+            <h3>🗺 Incident Map View</h3>
+            <GovernmentMapComponent 
+              incidents={incidents} 
+              showResources={true}
+              showUserLocation={false}
+              onMarkerClick={handleMapMarkerClick}
+            />
           </div>
         </div>
       </div>
